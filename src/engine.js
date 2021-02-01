@@ -2,10 +2,11 @@
 // John Resig - https://johnresig.com/ - MIT Licensed
 const cache = {};
 
-export const engine = (str, data) => {
+export const engine = (path, data) => {
+  const template = require('./pages/'+path).default;
   // Figure out if we're getting a template, or if we need to
   // load the template - and be sure to cache the result.
-  const fn = !/\W/.test(str) ? cache[str] = cache[str] || engine(document.getElementById(str).innerHTML) :
+  const fn = !/\W/.test(template) ? cache[path] = cache[path] || engine(template) :
     // Generate a reusable function that will serve as a template
     // generator (and which will be cached).
     new Function("obj",
@@ -13,7 +14,7 @@ export const engine = (str, data) => {
       // Introduce the data as local variables using with(){}
       "with(obj){p.push('" +
       // Convert the template into pure JavaScript
-      str
+      template
         .replace(/[\r\t\n]/g, " ")
         .split("<%").join("\t")
         .replace(/((^|%>)[^\t]*)'/g, "$1\r")
@@ -22,7 +23,7 @@ export const engine = (str, data) => {
         .split("%>").join("p.push('")
         .split("\r").join("\\'")
     + "');}return p.join('');");
-   
+   console.log(fn);
   // Provide some basic currying to the user
   return data ? fn( data ) : fn;
 };
