@@ -11,13 +11,14 @@ const routes = {};
   * @param controller data controller
   */
 export const route = (path, templatePath, controller) => {
-  const listeners = [];
+  let refresh;
   controller.prototype.$on = (selector, evt, handler) => events.push([selector, evt, handler]);
-  controller.prototype.$refresh = () => listeners.forEach(fn => fn());
+  controller.prototype.$refresh = () => refresh()
   routes[path] = {
-    controller: controller,
     templatePath: templatePath,
-    onRefresh: listeners.push.bind(listeners)
+    controller: controller,
+    // onRefresh: listeners.push.bind(listeners) this solution leads to memory leak
+    onRefresh: (fn) => { refresh = fn; } // this solution is sufficient for current assignment
   };
 };
 
