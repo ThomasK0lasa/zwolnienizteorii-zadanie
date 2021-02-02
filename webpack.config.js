@@ -1,3 +1,5 @@
+const CopyPlugin = require("copy-webpack-plugin");
+
 module.exports = {
   mode: 'development',
   devtool: 'inline-source-map',
@@ -16,6 +18,26 @@ module.exports = {
         test: /\.ejs$/i,
         use: 'raw-loader',
       },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          "style-loader",
+          "css-loader",
+          {
+            loader: "sass-loader",
+            options: {
+              implementation: require("sass"),
+            },
+          },
+        ],
+      },
     ],
-  }
+  },
+  plugins: [
+    new CopyPlugin({
+      patterns: [
+        { from: "public", to: "" },
+      ],
+    }),
+  ],
 };
