@@ -12,6 +12,7 @@ route('/', 'home.ejs', function () {
   this.$on('.login-button', 'click', async () => {
     event.preventDefault();
     const valid = validate();
+    // setting the response depending on validation and server response result
     const response = !valid.error ? await login({ username: valid.username, password: valid.password }) : undefined;
     if (response && !response.error) {
       localStorage.setItem('username', valid.username);
