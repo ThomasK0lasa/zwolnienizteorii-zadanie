@@ -10,15 +10,15 @@ route('/', 'home.ejs', function () {
   this.errorMessage = null;
   this.username = localStorage.getItem('username');
   this.$on('.login-button', 'click', async () => {
-    const username = document.getElementById('input-username').value;
-    const password = document.getElementById('input-password').value;
-    const response = await login({ username: username, password: password });
-    if (!response.error) {
-      localStorage.setItem('username', username);
+    event.preventDefault();
+    const valid = validate();
+    const response = !valid.error ? await login({ username: valid.username, password: valid.password }) : undefined;
+    if (response && !response.error) {
+      localStorage.setItem('username', valid.username);
       localStorage.setItem('token', response.token);
       redirect('/success');
     } else {
-      this.errorMessage = response.message;
+      this.errorMessage = valid.error ? valid.errorMessage : response.message;
       this.$refresh();
     }
   });
@@ -64,7 +64,7 @@ async function login(data = {}) {
     });
     return response.json();
   } catch (error) {
-    return {error: true, message: error};
+    return { error: true, message: error };
   }
 }
 
@@ -79,6 +79,32 @@ function isAuthorized() {
   return !!localStorage.getItem('token');
 }
 
-function validator() {
+function validate() {
+  const response = {};
 
+  // username validation
+  const username = document.getElementById('input-username');
+  if (username.checkValidity()) {
+    response.username = username.value;
+  } else {
+    //username.reportValidity();
+    response.error = true;
+    response.errorMessage = `- USERNAME can't be empty`;
+  }
+
+  // password validation
+  const password = document.getElementById('input-password');
+  if (password.checkValidity()) {
+    response.password = password.value;
+  } else {
+    //password.reportValidity();
+    const message = `- PASSWORD can't be empty`
+    if (response.error) {
+      response.errorMessage += '<br>' + message;
+    } else {
+      response.error = true;
+      response.errorMessage = message;
+    }
+  }
+  return response;
 }
