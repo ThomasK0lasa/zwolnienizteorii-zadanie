@@ -1,0 +1,23 @@
+main {
+  background-color: white;
+  box-shadow: 0 0 10px -5px black;
+  padding: 15px;
+  width: 100%;
+  max-width: 500px;
+
+  &.home {
+    max-width: 750px;
+  }
+
+  &.about, &.success {
+    text-align: center;
+  }
+
+  h1 {
+    margin-top: 0;
+  }
+}
+
+.error404 {
+  font-size: 400%;
+}

@@ -1,0 +1,18 @@
+<% if(username){ %>
+  <main class="success">
+    <h1>
+      Success!
+    </h1>
+    <p>Hi <%= username %>
+    </p>
+    <button class="logout-button">Logout</button>
+  </main>
+  <% } else { %>
+    <main class="unauthorized">
+      <h1>
+        Unauthorized!
+      </h1>
+      <p>Seems that You are not logged in.</p>
+      <a href="/">Go to Home</a>
+    </main>
+    <% } %>

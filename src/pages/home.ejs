@@ -1,3 +1,25 @@
-<main>
-    <h1>Start <%= where %>!</h1>
+<main class="home">
+  <h1>Welcome</h1>
+  <% if(!username){ %>
+    <form method="post">
+      <div class="container">
+        <label for="username"><b>Username</b></label>
+        <input id="input-username" type="text" placeholder="Enter Username" name="username" required>
+
+        <label for="password"><b>Password</b></label>
+        <input id="input-password" type="password" placeholder="Enter Password" name="password" required>
+        <% if(errorMessage){ %>
+          <p class="error-message">
+            <%= errorMessage %>
+          </p>
+          <% } %>
+            <button class="login-button">Login</button>
+      </div>
+    </form>
+    <% } else { %>
+      <p>You are already logged in <strong><%= username %></strong>
+      </p>
+      <p>You Want to go to "Success" page? <a href="#/success">Click here</a></p>
+      <button class="logout-button">Logout</button>
+      <% } %>
 </main>
